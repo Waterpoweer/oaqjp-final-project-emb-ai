@@ -9,16 +9,22 @@ def home():
 
 @app.route("/emotionDetector")
 def Emotion_Detector():
+    
+   
     textToAnalyze = request.args.get("textToAnalyze")
-
+   
     result = emotion_detector(textToAnalyze)
     
-    dominant_emotion = result.pop("dominant_emotion")
+    if result["dominant_emotion"] == None : 
+        return " Invalid text! Please try again!."
+    else :
 
-    output = ", ".join([f'{e}: {s}' for e, s in result.items()])
+        dominant_emotion = result.pop("dominant_emotion")
 
-    return f'For the given statement, the system response is  {output}. The dominant emotion is {dominant_emotion}.'
+        output = ", ".join([f'{e}: {s}' for e, s in result.items()])
+
+        return f'For the given statement, the system response is  {output}. The dominant emotion is {dominant_emotion}.', 200
+
 
 if __name__ == "__main__":
     app.run(debug= True, port=5000)
-
